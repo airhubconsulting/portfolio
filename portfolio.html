@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio — Angela Guo</title>
+<link rel="stylesheet" href="_shared.css">
+</head>
+<body>
+<div class="site">
+  <nav class="nav">
+    <div class="nav-brand">
+      <span class="nav-brand-name">Angela Guo</span>
+      <span class="nav-brand-roles">Product Leader · AI System Builder<br>Occasional Traveler & Investor</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="index.html#story">My story</a></li>
+      <li><a href="index.html#philosophy">Product philosophy</a></li>
+      <li><a href="portfolio.html" class="active">Portfolio</a></li>
+      <li><a href="blog.html">Blog</a></li>
+      <li><a href="notes.html">Field notes</a></li>
+    </ul>
+    <div class="nav-footer">Always learning<br>and building</div>
+  </nav>
+  <main class="main">
+    <div style="padding-top:56px;">
+      <a href="index.html" class="back-link">Back home</a>
+      <div class="page-header">
+        <h1>Portfolio</h1>
+        <p>Products shipped across e-commerce, social, and AI — from 0 to millions of users.</p>
+      </div>
+    </div>
+    <!-- All projects rendered by _content.js -->
+    <div class="portfolio-grid" id="full-portfolio" style="padding-bottom:80px;">
+      <div style="color:var(--ink-faint);font-size:13px;padding:20px 0;">Loading...</div>
+    </div>
+  </main>
+</div>
+<button id="chat-toggle" title="Ask Angela">💬</button>
+<div id="chat-panel">
+  <div class="chat-header">
+    <div class="chat-avatar">AG</div>
+    <div><div class="chat-header-name">Ask Angela</div><div class="chat-header-sub">Powered by Claude</div></div>
+    <button class="chat-close" id="chat-close-btn">✕</button>
+  </div>
+  <div class="chat-messages" id="chat-messages">
+    <div class="chat-msg bot">Ask me anything about Angela's portfolio 👋</div>
+  </div>
+  <div class="chat-suggestions" id="chat-suggestions">
+    <button class="suggestion-btn">Tell me about Shop The Look</button>
+    <button class="suggestion-btn">What's her biggest 0→1?</button>
+  </div>
+  <div class="rate-notice">Ask me anything · <a href="mailto:angelaguo18@gmail.com">email Angela</a></div>
+  <div class="chat-input-row">
+    <input type="text" id="chat-input" placeholder="Ask something..." maxlength="200">
+    <button id="chat-send">→</button>
+  </div>
+</div>
+<script src="_content.js"></script>
+<script src="_chat.js"></script>
+<script>renderFullPortfolio('full-portfolio');</script>
+</body>
+</html>

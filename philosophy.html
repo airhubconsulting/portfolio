@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Philosophy — Angela Guo</title>
+<link rel="stylesheet" href="_shared.css">
+</head>
+<body>
+<div class="site">
+  <nav class="nav">
+    <div class="nav-brand">
+      <span class="nav-brand-name">Angela Guo</span>
+      <span class="nav-brand-roles">Product Leader · AI System Builder<br>Occasional Traveler & Investor</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="index.html#story">My story</a></li>
+      <li><a href="philosophy.html" class="active">Philosophy</a></li>
+      <li><a href="portfolio.html">Portfolio</a></li>
+      <li><a href="blog.html">Blog</a></li>
+      <li><a href="notes.html">Field notes</a></li>
+    </ul>
+    <div class="nav-footer">Always learning<br>and building</div>
+  </nav>
+  <main class="main">
+    <div style="padding-top:56px;">
+      <a href="index.html" class="back-link">Back home</a>
+      <div class="page-header">
+        <h1>Product philosophy</h1>
+        <p>A living list of beliefs. Updated whenever a new conviction solidifies.</p>
+      </div>
+    </div>
+    <!-- ✏️ ADD newest beliefs at TOP. Copy one <li> block. -->
+    <ul class="philosophy-list" style="padding-bottom:80px;">
+      <li class="philosophy-item"><span class="phi-num">1</span><p class="phi-text">"AI Product" is a term I feel ambivalent about. AI is a technology — like Java. The real job is to solve a problem. AI is a means to the end, not the end itself.</p></li>
+      <li class="philosophy-item"><span class="phi-num">2</span><p class="phi-text">Understanding the limitations of models, the unglamorous data labeling work, and driving complements from engineering and UX work — that's the difference between shipping good and great AI product.</p></li>
+      <li class="philosophy-item"><span class="phi-num">3</span><p class="phi-text">Product sense is knowing what users need most out of all possible requests (and which makes the biggest business impact). Between what users ask for and what they actually need — that gap is where product work lives.</p></li>
+      <li class="philosophy-item"><span class="phi-num">4</span><p class="phi-text">Be a multiplier — PMs are measured by the team's output. The best PMs make engineers more effective, designers braver, data scientists more product-minded.</p></li>
+      <!-- ✏️ ADD MORE BELIEFS HERE -->
+    </ul>
+  </main>
+</div>
+<button id="chat-toggle" title="Ask Angela">💬</button>
+<div id="chat-panel">
+  <div class="chat-header"><div class="chat-avatar">AG</div><div><div class="chat-header-name">Ask Angela</div><div class="chat-header-sub">Powered by Claude</div></div><button class="chat-close" id="chat-close-btn">✕</button></div>
+  <div class="chat-messages" id="chat-messages"><div class="chat-msg bot">Ask me about Angela's product beliefs 👋</div></div>
+  <div class="chat-suggestions" id="chat-suggestions"><button class="suggestion-btn">What does she think about AI?</button></div>
+  <div class="rate-notice">Ask me anything · <a href="mailto:angelaguo18@gmail.com">email Angela</a></div>
+  <div class="chat-input-row"><input type="text" id="chat-input" placeholder="Ask something..." maxlength="200"><button id="chat-send">→</button></div>
+</div>
+<script src="_chat.js"></script>
+</body>
+</html>
