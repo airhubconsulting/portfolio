@@ -8,8 +8,16 @@ export async function onRequestGet(context) {
   const code = url.searchParams.get("code");
   const state = url.searchParams.get("state");
 
+  // DEBUG — remove after fixing
   if (!code) {
-    return new Response("Missing code parameter", { status: 400 });
+    return new Response(
+      `<h2>Debug info</h2>
+      <p>Full URL: ${request.url}</p>
+      <p>All params: ${url.searchParams.toString()}</p>
+      <p>Code: ${code}</p>
+      <p>State: ${state}</p>`,
+      { headers: { "Content-Type": "text/html" } }
+    );
   }
 
   // Exchange code for access token
