@@ -30,15 +30,24 @@ function parseFrontmatter(raw) {
 }
 
 // ── Fetch a content index ─────────────────────────────────
-// Cloudflare Pages serves directory listings as JSON when
-// you add a _redirects or use the file list endpoint.
-// We maintain a simple manifest file instead — more reliable.
+// Calls /manifest/[type] Cloudflare Function which reads live
+// file list from GitHub API using GITHUB_TOKEN env variable.
+// Falls back to static manifest.json if function unavailable.
 async function fetchManifest(type) {
   try {
-    const res = await fetch(`/content/${type}/manifest.json`);
-    if (!res.ok) return [];
-    return await res.json(); // array of filenames e.g. ["shop-the-look.md"]
-  } catch { return []; }
+    // Try dynamic manifest first (requires GITHUB_TOKEN env var)
+    const res = await fetch(`/manifest/${type}`);
+    if (res.ok) {
+      const data = await res.json();
+      if (Array.isArray(data) && data.length > 0) return data;
+    }
+    // Fallback to static manifest.json
+    const fallback = await fetch(`/content/${type}/manifest.json`);
+    if (!fallback.ok) return [];
+    return await fallback.json();
+  } catch {
+    return [];
+  }
 }
 
 // ── Fetch and parse one content file ─────────────────────
