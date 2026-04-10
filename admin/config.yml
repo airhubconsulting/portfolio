@@ -1,7 +1,9 @@
 backend:
   name: github
-  repo: airhubconsulting/portfolio   # ✏️ e.g. angelaguo/portfolio
+  repo: airhubconsulting/portfolio   # ✏️ your GitHub username/repo
   branch: main
+  base_url: https://angelaguo.pages.dev
+  auth_endpoint: api/auth/callback/github
 
 # Where uploaded images go
 media_folder: uploads
