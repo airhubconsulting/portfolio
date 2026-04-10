@@ -70,7 +70,7 @@ async function loadAll(type) {
   return entries.filter(Boolean);
 }
 
-// ── Simple markdown → HTML (bold, italic, paragraphs, links)
+// ── Simple markdown → HTML ────────────────────────────────
 function simpleMarkdown(md) {
   if (!md) return '';
   return md
@@ -79,7 +79,9 @@ function simpleMarkdown(md) {
     .replace(/\*(.+?)\*/g, '<em>$1</em>')
     .replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2">$1</a>')
     .split(/\n\n+/)
-    .map(p => `<p>${p.replace(/\n/g, '<br>')}</p>`)
+    .map(p => p.trim())
+    .filter(p => p.length > 0)
+    .map(p => `<p style="margin-bottom:1.4em">${p.replace(/\n/g, ' ')}</p>`)
     .join('');
 }
 
