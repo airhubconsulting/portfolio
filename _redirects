@@ -1,0 +1,3 @@
+# Clean URLs for blog posts
+# /blog/2026-04-08-no-such-thing-as-ai-product → /blog/post.html?slug=2026-04-08-no-such-thing-as-ai-product.md
+/blog/:slug  /blog/post.html?slug=:slug.md  200

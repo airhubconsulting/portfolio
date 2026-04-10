@@ -30,15 +30,24 @@ function parseFrontmatter(raw) {
 }
 
 // ── Fetch a content index ─────────────────────────────────
-// Cloudflare Pages serves directory listings as JSON when
-// you add a _redirects or use the file list endpoint.
-// We maintain a simple manifest file instead — more reliable.
+// Calls /manifest/[type] Cloudflare Function which reads live
+// file list from GitHub API using GITHUB_TOKEN env variable.
+// Falls back to static manifest.json if function unavailable.
 async function fetchManifest(type) {
   try {
-    const res = await fetch(`/content/${type}/manifest.json`);
-    if (!res.ok) return [];
-    return await res.json(); // array of filenames e.g. ["shop-the-look.md"]
-  } catch { return []; }
+    // Try dynamic manifest first (requires GITHUB_TOKEN env var)
+    const res = await fetch(`/manifest/${type}`);
+    if (res.ok) {
+      const data = await res.json();
+      if (Array.isArray(data) && data.length > 0) return data;
+    }
+    // Fallback to static manifest.json
+    const fallback = await fetch(`/content/${type}/manifest.json`);
+    if (!fallback.ok) return [];
+    return await fallback.json();
+  } catch {
+    return [];
+  }
 }
 
 // ── Fetch and parse one content file ─────────────────────
@@ -61,7 +70,7 @@ async function loadAll(type) {
   return entries.filter(Boolean);
 }
 
-// ── Simple markdown → HTML (bold, italic, paragraphs, links)
+// ── Simple markdown → HTML ────────────────────────────────
 function simpleMarkdown(md) {
   if (!md) return '';
   return md
@@ -70,7 +79,9 @@ function simpleMarkdown(md) {
     .replace(/\*(.+?)\*/g, '<em>$1</em>')
     .replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2">$1</a>')
     .split(/\n\n+/)
-    .map(p => `<p>${p.replace(/\n/g, '<br>')}</p>`)
+    .map(p => p.trim())
+    .filter(p => p.length > 0)
+    .map(p => `<p style="margin-bottom:1.4em">${p.replace(/\n/g, ' ')}</p>`)
     .join('');
 }
 
@@ -171,48 +182,17 @@ function filterBlog(containerId, tag) {
   });
 }
 
-// ── Blog post click → open post inline ───────────────────
+// ── Blog post click → navigate to post page ──────────────
 function attachBlogClicks(container) {
   container.querySelectorAll('.blog-item').forEach(item => {
-    item.addEventListener('click', async () => {
+    item.addEventListener('click', () => {
       const file = item.dataset.file;
       if (!file) return;
-      const post = await fetchEntry('blog', file);
-      if (!post) return;
-      openPost(post);
+      // Remove .md extension for the slug
+      const slug = file.replace(/\.md$/, '');
+      window.location.href = `/blog/${slug}`;
     });
   });
-}
-
-// ── Inline post reader ────────────────────────────────────
-function openPost(post) {
-  const existing = document.getElementById('post-overlay');
-  if (existing) existing.remove();
-
-  const date = post.date ? new Date(post.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : '';
-  const overlay = document.createElement('div');
-  overlay.id = 'post-overlay';
-  overlay.style.cssText = `
-    position:fixed;inset:0;background:rgba(24,18,14,0.5);
-    z-index:2000;display:flex;align-items:flex-start;justify-content:center;
-    padding:40px 20px;overflow-y:auto;
-  `;
-  overlay.innerHTML = `
-    <div style="
-      background:var(--paper);max-width:640px;width:100%;
-      border-radius:12px;padding:40px 48px 56px;position:relative;
-    ">
-      <button onclick="document.getElementById('post-overlay').remove()" style="
-        position:absolute;top:20px;right:20px;background:none;border:none;
-        font-size:18px;color:var(--ink-faint);cursor:pointer;line-height:1;
-      ">✕</button>
-      <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--ink-faint);margin-bottom:10px;">#${post.tag || ''} · ${date}</div>
-      <h1 style="font-size:24px;font-weight:600;color:var(--ink);line-height:1.25;letter-spacing:-0.02em;margin-bottom:28px;">${post.title}</h1>
-      <div style="font-size:16px;line-height:1.85;color:var(--ink);">${simpleMarkdown(post._body)}</div>
-    </div>
-  `;
-  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
-  document.body.appendChild(overlay);
 }
 
 // ── Blog filter buttons ───────────────────────────────────

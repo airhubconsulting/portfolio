@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blog — Angela Guo</title>
+<link rel="stylesheet" href="/_shared.css">
+<style>
+  .post-wrap { max-width: 640px; padding: 56px 0 120px; }
+  .post-eyebrow { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-faint); margin-bottom: 16px; }
+  .post-title { font-size: clamp(22px, 3vw, 32px); font-weight: 600; color: var(--ink); line-height: 1.2; letter-spacing: -0.02em; margin-bottom: 40px; }
+  .post-body { font-size: 16px; line-height: 1.85; color: var(--ink); }
+  .post-body p { margin-bottom: 1.4em; }
+  .post-body p:last-child { margin-bottom: 0; }
+  .post-body strong { font-weight: 600; }
+  .post-body em { font-style: italic; }
+  .post-body a { color: var(--accent); }
+  .post-loading { color: var(--ink-faint); font-size: 14px; padding: 40px 0; }
+  .post-error { color: var(--ink-muted); font-size: 14px; padding: 40px 0; }
+</style>
+</head>
+<body>
+<div class="site">
+
+  <nav class="nav">
+    <div class="nav-brand">
+      <span class="nav-brand-name">Angela Guo</span>
+      <span class="nav-brand-roles">Product Leader · AI System Builder<br>Occasional Traveler & Investor</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="/#story">My story</a></li>
+      <li><a href="/#philosophy">Product philosophy</a></li>
+      <li><a href="/portfolio.html">Portfolio</a></li>
+      <li><a href="/blog.html" class="active">Blog</a></li>
+      <li><a href="/#notes">Field notes</a></li>
+    </ul>
+    <div class="nav-footer">Always learning<br>and building</div>
+  </nav>
+
+  <main class="main">
+    <div class="post-wrap">
+      <a href="/blog.html" class="back-link">All posts</a>
+      <div id="post-content">
+        <div class="post-loading">Loading...</div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- CHATBOT -->
+<button id="chat-toggle" title="Ask Angela">💬</button>
+<div id="chat-panel">
+  <div class="chat-header">
+    <div class="chat-avatar">AG</div>
+    <div><div class="chat-header-name">Ask Angela</div><div class="chat-header-sub">Powered by Gemini</div></div>
+    <button class="chat-close" id="chat-close-btn">✕</button>
+  </div>
+  <div class="chat-messages" id="chat-messages">
+    <div class="chat-msg bot">Ask me anything about Angela 👋</div>
+  </div>
+  <div class="chat-suggestions" id="chat-suggestions">
+    <button class="suggestion-btn">What has she shipped?</button>
+    <button class="suggestion-btn">Is she open to roles?</button>
+  </div>
+  <div class="rate-notice">Ask me anything · <a href="mailto:angelaguo18@gmail.com">email Angela</a></div>
+  <div class="chat-input-row">
+    <input type="text" id="chat-input" placeholder="Ask something..." maxlength="200">
+    <button id="chat-send">→</button>
+  </div>
+</div>
+
+<script src="/_chat.js"></script>
+<script>
+// ── Parse frontmatter ──────────────────────────────────────
+function parseFrontmatter(raw) {
+  const match = raw.match(/^---\n([\s\S]*?)\n---/);
+  if (!match) return { data: {}, body: raw };
+  const body = raw.slice(match[0].length).trim();
+  const data = {};
+  match[1].split('\n').forEach(line => {
+    const colon = line.indexOf(':');
+    if (colon === -1) return;
+    const key = line.slice(0, colon).trim();
+    let val = line.slice(colon + 1).trim();
+    if ((val.startsWith('"') && val.endsWith('"')) ||
+        (val.startsWith("'") && val.endsWith("'"))) val = val.slice(1, -1);
+    if (val === 'true') val = true;
+    else if (val === 'false') val = false;
+    data[key] = val;
+  });
+  return { data, body };
+}
+
+// ── Markdown renderer ─────────────────────────────────────
+function renderMarkdown(md) {
+  if (!md) return '';
+  return md
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g, '<em>$1</em>')
+    .replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2">$1</a>')
+    .split(/\n\n+/)
+    .map(p => p.trim())
+    .filter(p => p.length > 0)
+    .map(p => `<p>${p.replace(/\n/g, ' ')}</p>`)
+    .join('');
+}
+
+// ── Load and render post ──────────────────────────────────
+async function loadPost() {
+  const params = new URLSearchParams(window.location.search);
+  const slug = params.get('slug');
+  const container = document.getElementById('post-content');
+
+  if (!slug) {
+    container.innerHTML = '<p class="post-error">No post specified. <a href="/blog.html">Back to blog →</a></p>';
+    return;
+  }
+
+  try {
+    const res = await fetch(`/content/blog/${slug}`);
+    if (!res.ok) throw new Error('Post not found');
+    const raw = await res.text();
+    const { data, body } = parseFrontmatter(raw);
+
+    // Update page title
+    if (data.title) document.title = `${data.title} — Angela Guo`;
+
+    // Format date
+    let dateStr = '';
+    if (data.date) {
+      const d = new Date(data.date);
+      dateStr = d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    }
+
+    container.innerHTML = `
+      <div class="post-eyebrow">${data.tag ? '#' + data.tag : ''} ${dateStr ? '· ' + dateStr : ''}</div>
+      <h1 class="post-title">${data.title || 'Untitled'}</h1>
+      <div class="post-body">${renderMarkdown(body)}</div>
+    `;
+  } catch (err) {
+    container.innerHTML = '<p class="post-error">Post not found. <a href="/blog.html">Back to blog →</a></p>';
+  }
+}
+
+loadPost();
+</script>
+</body>
+</html>
