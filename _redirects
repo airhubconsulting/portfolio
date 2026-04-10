@@ -1,3 +1,2 @@
-# Clean URLs for blog posts
-# Matches date-prefixed slugs like /blog/2026-04-08-my-post
-/blog/20* /blog/post.html 200
+# No blog URL rewriting needed — using query params instead
+# This file intentionally minimal

@@ -188,9 +188,7 @@ function attachBlogClicks(container) {
     item.addEventListener('click', () => {
       const file = item.dataset.file;
       if (!file) return;
-      // Remove .md extension for the slug
-      const slug = file.replace(/\.md$/, '');
-      window.location.href = `/blog/${slug}`;
+      window.location.href = `/blog/post.html?slug=${file}`;
     });
   });
 }
