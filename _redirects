@@ -1,4 +1,3 @@
 # Clean URLs for blog posts
 # Matches date-prefixed slugs like /blog/2026-04-08-my-post
-# Does NOT match /blog/post.html itself
-/blog/20:slug  /blog/post.html?slug=20:slug.md  200
+/blog/20* /blog/post.html 200

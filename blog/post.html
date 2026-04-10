@@ -108,8 +108,19 @@ function renderMarkdown(md) {
 
 // ── Load and render post ──────────────────────────────────
 async function loadPost() {
+  // Try query param first (?slug=...), then fall back to pathname
   const params = new URLSearchParams(window.location.search);
-  const slug = params.get('slug');
+  let slug = params.get('slug');
+
+  // Fallback: extract slug from pathname /blog/2026-04-08-my-post
+  if (!slug) {
+    const parts = window.location.pathname.split('/').filter(Boolean);
+    const last = parts[parts.length - 1];
+    if (last && last !== 'post.html') {
+      slug = last.endsWith('.md') ? last : last + '.md';
+    }
+  }
+
   const container = document.getElementById('post-content');
 
   if (!slug) {
