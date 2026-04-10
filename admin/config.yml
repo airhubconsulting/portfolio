@@ -1,9 +1,9 @@
 backend:
   name: github
-  repo: airhubconsulting/portfolio   # ✏️ your GitHub username/repo
+  repo: airhubconsulting/portfolio
   branch: main
-  base_url: https://angelaguo.pages.dev
-  auth_endpoint: api/auth/callback/github
+  auth_type: implicit
+  app_id: Ov23lioRoh1RijRfwMMX
 
 # Where uploaded images go
 media_folder: uploads
@@ -31,6 +31,7 @@ collections:
       - { label: "Description", name: description, widget: text, hint: "2–3 sentences. Problem, your role, outcome." }
       - { label: "Featured on homepage", name: featured, widget: boolean, default: false, hint: "Show on homepage (max 3 shown)" }
       - { label: "Image", name: image, widget: image, required: false, hint: "Optional screenshot or demo" }
+      - { label: "Case study", name: body, widget: markdown, required: false, hint: "Optional: full case study — problem, approach, decisions, learnings" }
 
   # ── BLOG ──────────────────────────────────────────────────
   - name: blog
@@ -46,3 +47,17 @@ collections:
       - { label: "Tag", name: tag, widget: select, options: ["product", "build-in-public", "self"] }
       - { label: "Featured on homepage", name: featured, widget: boolean, default: false, hint: "Show on homepage (max 3 shown)" }
       - { label: "Body", name: body, widget: markdown }
+
+  # ── FIELD NOTES ───────────────────────────────────────────
+  - name: notes
+    label: Field notes
+    label_singular: Note
+    folder: content/notes
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    summary: "{{prefix}} · {{date}}"
+    fields:
+      - { label: "Text", name: title, widget: string, hint: "The observation — one sentence to a few" }
+      - { label: "Prefix", name: prefix, widget: select, options: ["// work", "// life", "// travel", "// reading", "// random"], default: "// work" }
+      - { label: "Date", name: date, widget: datetime, format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false }
+      - { label: "Featured on homepage", name: featured, widget: boolean, default: false, hint: "Show on homepage (max 5 shown)" }

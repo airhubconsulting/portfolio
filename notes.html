@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Notes — Angela Guo</title>
+<title>Field notes — Angela Guo</title>
 <link rel="stylesheet" href="_shared.css">
 </head>
 <body>
@@ -15,7 +15,7 @@
     </div>
     <ul class="nav-links">
       <li><a href="index.html#story">My story</a></li>
-      <li><a href="philosophy.html">Philosophy</a></li>
+      <li><a href="index.html#philosophy">Product philosophy</a></li>
       <li><a href="portfolio.html">Portfolio</a></li>
       <li><a href="blog.html">Blog</a></li>
       <li><a href="notes.html" class="active">Field notes</a></li>
@@ -30,28 +30,22 @@
         <p>Micro-observations from work and life. The things that made me think, laugh, or pause.</p>
       </div>
     </div>
-    <!-- ✏️ ADD newest notes at TOP — prepend each new one -->
-    <!-- prefix options: // work · // life · // travel · // reading · // random -->
-    <div class="notes-list" style="padding-bottom:80px;">
-      <div class="note-item">
-        <div>
-          <div class="note-prefix">// work</div>
-          <div class="note-text">Wanted to work at 10:50pm but ran out of Claude tokens for today. Feels like my coworker went off work. Time to go home.</div>
-        </div>
-        <div class="note-date">Oct 2024</div>
-      </div>
-      <!-- ✏️ ADD MORE NOTES HERE — copy the block above, prepend newest first -->
+    <!-- All notes rendered by _content.js -->
+    <div class="notes-list" id="full-notes" style="padding-bottom:80px;">
+      <div style="color:var(--ink-faint);font-size:13px;padding:20px 0;">Loading...</div>
     </div>
   </main>
 </div>
 <button id="chat-toggle" title="Ask Angela">💬</button>
 <div id="chat-panel">
-  <div class="chat-header"><div class="chat-avatar">AG</div><div><div class="chat-header-name">Ask Angela</div><div class="chat-header-sub">Powered by Claude</div></div><button class="chat-close" id="chat-close-btn">✕</button></div>
+  <div class="chat-header"><div class="chat-avatar">AG</div><div><div class="chat-header-name">Ask Angela</div><div class="chat-header-sub">Powered by Gemini</div></div><button class="chat-close" id="chat-close-btn">✕</button></div>
   <div class="chat-messages" id="chat-messages"><div class="chat-msg bot">Ask me anything about Angela 👋</div></div>
   <div class="chat-suggestions" id="chat-suggestions"><button class="suggestion-btn">Is she open to roles?</button><button class="suggestion-btn">What's she working on?</button></div>
   <div class="rate-notice">Ask me anything · <a href="mailto:angelaguo18@gmail.com">email Angela</a></div>
   <div class="chat-input-row"><input type="text" id="chat-input" placeholder="Ask something..." maxlength="200"><button id="chat-send">→</button></div>
 </div>
+<script src="_content.js"></script>
 <script src="_chat.js"></script>
+<script>renderFullNotes('full-notes');</script>
 </body>
 </html>

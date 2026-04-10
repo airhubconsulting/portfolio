@@ -13,7 +13,7 @@ export async function onRequestGet(context) {
   };
 
   // Valid content types only
-  if (!['portfolio', 'blog'].includes(type)) {
+  if (!['portfolio', 'blog', 'notes'].includes(type)) {
     return new Response(JSON.stringify([]), { headers: cors });
   }
 

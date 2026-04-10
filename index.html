@@ -129,20 +129,11 @@
       <a href="blog.html" class="view-all-link">View all posts</a>
     </section>
 
-    <!-- FIELD NOTES — append-only in HTML -->
+    <!-- FIELD NOTES — rendered by _content.js -->
     <section id="notes" class="section">
       <p class="section-eyebrow">Field notes</p>
-      <!-- ✏️ ADD newest at TOP. One sentence to a few. -->
-      <!-- prefix options: // work · // life · // travel · // reading · // random -->
-      <div class="notes-list">
-        <div class="note-item">
-          <div>
-            <div class="note-prefix">// work</div>
-            <div class="note-text">Wanted to work at 10:50pm but ran out of Claude tokens for today. Feels like my coworker went off work. Time to go home.</div>
-          </div>
-          <div class="note-date">Oct 2024</div>
-        </div>
-        <!-- ✏️ ADD MORE NOTES HERE — prepend newest first -->
+      <div class="notes-list" id="homepage-notes">
+        <div style="color:var(--ink-faint);font-size:13px;padding:20px 0;">Loading...</div>
       </div>
       <a href="notes.html" class="view-all-link">View all notes</a>
     </section>
@@ -163,7 +154,7 @@
 <div id="chat-panel">
   <div class="chat-header">
     <div class="chat-avatar">AG</div>
-    <div><div class="chat-header-name">Ask Angela</div><div class="chat-header-sub">Powered by AI</div></div>
+    <div><div class="chat-header-name">Ask Angela</div><div class="chat-header-sub">Powered by Claude · Usually instant</div></div>
     <button class="chat-close" id="chat-close-btn">✕</button>
   </div>
   <div class="chat-messages" id="chat-messages">
@@ -187,6 +178,7 @@
 <script>
   renderHomepagePortfolio('homepage-portfolio');
   renderHomepageBlog('homepage-blog');
+  renderHomepageNotes('homepage-notes');
 
   const navLinks = document.querySelectorAll(".nav-links a[href^='#']");
   document.querySelectorAll("section[id]").forEach(s =>

@@ -87,7 +87,7 @@ function simpleMarkdown(md) {
 
 // ── Render portfolio card ─────────────────────────────────
 function portfolioCard(p, featured = false) {
-  const img = p.image
+  const img = p.image && p.image !== '""' && p.image !== ''
     ? `<img src="${p.image}" alt="${p.name}">`
     : `<div class="portfolio-card-media-placeholder">📸 Add screenshot</div>`;
   return `
@@ -202,4 +202,37 @@ function initBlogFilters(containerId) {
       filterBlog(containerId, btn.dataset.tag);
     });
   });
+}
+
+// ── Render note row ───────────────────────────────────────
+function noteRow(note) {
+  const date = note.date ? note.date.slice(0, 7) : '';
+  return `
+    <div class="note-item">
+      <div>
+        <div class="note-prefix">${note.prefix || '// note'}</div>
+        <div class="note-text">${note.title || ''}</div>
+      </div>
+      <div class="note-date">${date}</div>
+    </div>`;
+}
+
+// ── Render homepage notes preview (5 featured) ───────────
+async function renderHomepageNotes(containerId) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  const all = await loadAll('notes');
+  const featured = all.filter(n => n.featured).sort(byDateDesc).slice(0, 5);
+  if (!featured.length) { el.innerHTML = '<p style="color:var(--ink-faint);font-size:13px;">No notes yet.</p>'; return; }
+  el.innerHTML = featured.map(noteRow).join('');
+}
+
+// ── Render full notes page ────────────────────────────────
+async function renderFullNotes(containerId) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  const all = await loadAll('notes');
+  all.sort(byDateDesc);
+  if (!all.length) { el.innerHTML = '<p style="color:var(--ink-faint);font-size:13px;">No notes yet — add one in /admin.</p>'; return; }
+  el.innerHTML = all.map(noteRow).join('');
 }
