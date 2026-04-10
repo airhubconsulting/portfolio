@@ -142,18 +142,36 @@ Open `philosophy.html`, find `<!-- ✏️ ADD MORE BELIEFS HERE -->`, add:
 ```
 Save → push to GitHub → done.
 
-### Add a field note
-Open `notes.html`, find `<!-- ✏️ ADD MORE NOTES HERE -->`, prepend at the TOP:
-```html
-<div class="note-item">
-  <div>
-    <div class="note-prefix">// work</div>
-    <div class="note-text">Your observation here.</div>
-  </div>
-  <div class="note-date">Apr 2026</div>
-</div>
+### Add or edit blog tags
+Blog tags appear as filter buttons on the blog page and as dropdown options in the CMS. You need to update **both places** when adding a new tag:
+
+**1 — `admin/config.yml`** — add to the options list:
+```yaml
+- { label: "Tag", name: tag, widget: select, options: ["product", "build-in-public", "self", "your-new-tag"] }
 ```
-Prefix options: `// work` · `// life` · `// travel` · `// reading` · `// random`
+
+**2 — `blog.html`** — add a filter button:
+```html
+<button class="filter-btn" data-tag="your-new-tag">#your-new-tag</button>
+```
+
+The tag value in `config.yml` must exactly match the `data-tag` in `blog.html` for filtering to work.
+
+**Current tags:** `product` · `build-in-public` · `self`
+
+### Add a field note
+Go to `yoursite.com/admin` → **Field notes** → **New Note**
+Fill in: Text · Prefix · Date · Featured (on/off) → Publish
+
+### Add or edit field note prefix options
+Prefixes are the `// work`, `// life` etc. labels. To add a new one, update **one place**:
+
+**`admin/config.yml`** — find the notes prefix field and add to the options list:
+```yaml
+- { label: "Prefix", name: prefix, widget: select, options: ["// work", "// life", "// travel", "// reading", "// random", "// your-new-prefix"] }
+```
+
+**Current prefixes:** `// work` · `// life` · `// travel` · `// reading` · `// random`
 
 ### Add a photo to the hero
 1. Put your photo file (e.g. `photo.jpg`) in the root folder
