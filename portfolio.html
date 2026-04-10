@@ -5,6 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Portfolio — Angela Guo</title>
 <link rel="stylesheet" href="_shared.css">
+<style>
+  .img-zoom { cursor: zoom-in; }
+  .lightbox { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:3000; align-items:center; justify-content:center; padding:20px; }
+  .lightbox.open { display:flex; }
+  .lightbox img { max-width:90vw; max-height:90vh; border-radius:8px; object-fit:contain; }
+  .lightbox-close { position:fixed; top:20px; right:24px; color:white; font-size:28px; cursor:pointer; line-height:1; background:none; border:none; }
+</style>
 </head>
 <body>
 <div class="site">
@@ -30,21 +37,34 @@
         <p>Products shipped across e-commerce, social, and AI — from 0 to millions of users.</p>
       </div>
     </div>
-    <!-- All projects rendered by _content.js -->
+    <div class="blog-filters" id="company-filters">
+      <button class="filter-btn active" data-company="all">All</button>
+      <button class="filter-btn" data-company="Amazon">Amazon</button>
+      <button class="filter-btn" data-company="Pinterest">Pinterest</button>
+      <button class="filter-btn" data-company="VIP.com">VIP.com</button>
+      <button class="filter-btn" data-company="Side project">Side project</button>
+    </div>
     <div class="portfolio-grid" id="full-portfolio" style="padding-bottom:32px;">
       <div style="color:var(--ink-faint);font-size:13px;padding:20px 0;">Loading...</div>
     </div>
     <p style="font-size:13px;color:var(--ink-muted);line-height:1.65;padding-bottom:80px;">
-      Interested in the full story behind any of these? I'm happy to walk through case studies in a conversation.
+      Interested in the full story? I'm happy to walk through case studies in a conversation.
       <a href="mailto:angelaguo18@gmail.com?subject=Case study conversation" style="color:var(--accent);">Reach out →</a>
     </p>
   </main>
 </div>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <img id="lightbox-img" src="" alt="">
+</div>
+
 <button id="chat-toggle" title="Ask Angela">💬</button>
 <div id="chat-panel">
   <div class="chat-header">
     <div class="chat-avatar">AG</div>
-    <div><div class="chat-header-name">Ask Angela</div><div class="chat-header-sub">Powered by Claude</div></div>
+    <div><div class="chat-header-name">Ask Angela</div><div class="chat-header-sub">Powered by Gemini</div></div>
     <button class="chat-close" id="chat-close-btn">✕</button>
   </div>
   <div class="chat-messages" id="chat-messages">
@@ -62,6 +82,35 @@
 </div>
 <script src="_content.js"></script>
 <script src="_chat.js"></script>
-<script>renderFullPortfolio('full-portfolio');</script>
+<script>
+  renderFullPortfolio('full-portfolio');
+
+  // Company filter
+  document.querySelectorAll('#company-filters .filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#company-filters .filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const co = btn.dataset.company;
+      document.querySelectorAll('#full-portfolio .portfolio-card').forEach(card => {
+        card.style.display = (co === 'all' || card.dataset.company === co) ? '' : 'none';
+      });
+      // Re-apply featured layout to first visible card
+      const visible = [...document.querySelectorAll('#full-portfolio .portfolio-card')].filter(c => c.style.display !== 'none');
+      document.querySelectorAll('#full-portfolio .portfolio-card').forEach(c => c.classList.remove('featured'));
+      if (visible[0]) visible[0].classList.add('featured');
+    });
+  });
+
+  // Lightbox
+  function openLightbox(src) {
+    document.getElementById('lightbox-img').src = src;
+    document.getElementById('lightbox').classList.add('open');
+  }
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('open');
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+</script>
 </body>
 </html>
+

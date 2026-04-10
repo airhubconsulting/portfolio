@@ -88,10 +88,10 @@ function simpleMarkdown(md) {
 // ── Render portfolio card ─────────────────────────────────
 function portfolioCard(p, featured = false) {
   const img = p.image && p.image !== '""' && p.image !== ''
-    ? `<img src="${p.image}" alt="${p.name}">`
+    ? `<img src="${p.image}" alt="${p.name}" class="img-zoom" onclick="openLightbox('${p.image}')">`
     : `<div class="portfolio-card-media-placeholder">📸 Add screenshot</div>`;
   return `
-    <div class="portfolio-card${featured ? ' featured' : ''}">
+    <div class="portfolio-card${featured ? ' featured' : ''}" data-company="${p.company || ''}">
       <div class="portfolio-card-media">${img}</div>
       <div class="portfolio-card-body">
         <div class="portfolio-card-co">${p.company} · ${p.year}</div>
