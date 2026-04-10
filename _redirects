@@ -1,3 +1,4 @@
 # Clean URLs for blog posts
-# /blog/2026-04-08-no-such-thing-as-ai-product → /blog/post.html?slug=2026-04-08-no-such-thing-as-ai-product.md
-/blog/:slug  /blog/post.html?slug=:slug.md  200
+# Matches date-prefixed slugs like /blog/2026-04-08-my-post
+# Does NOT match /blog/post.html itself
+/blog/20:slug  /blog/post.html?slug=20:slug.md  200
