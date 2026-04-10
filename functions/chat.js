@@ -115,7 +115,12 @@ export async function onRequestPost(context) {
     }));
 
   // ── Call Gemini API ───────────────────────────────────────
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${env.GEMINI_API_KEY}`;
+  // ── Gemini model name ───────────────────────────────────
+  // Current free tier model as of April 2026: gemini-2.5-flash
+  // If this breaks in future, check: aistudio.google.com/models
+  // and update the model name below to the latest free Flash model
+  const GEMINI_MODEL = "gemini-2.5-flash";
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${env.GEMINI_API_KEY}`;
 
   try {
     const response = await fetch(url, {
